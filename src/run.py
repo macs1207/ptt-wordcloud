@@ -1,4 +1,3 @@
-from wordcloud.wordcloud import FONT_PATH
 from PttWebCrawler.crawler import *
 from wordcloud import WordCloud
 import numpy as np
