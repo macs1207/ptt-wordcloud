@@ -1,8 +1,8 @@
+from enum import unique
 from PttWebCrawler.crawler import *
 from wordcloud import WordCloud
 import numpy as np
 import jieba
-import multidict
 import json
 import re
 
@@ -37,25 +37,21 @@ class PttWordCloud:
         for filter in self.SYMBOLS:
             comments_str = comments_str.replace(filter, ' ')
 
-        words = jieba.cut(comments_str)
-        full_terms_dict = multidict.MultiDict()
-        tmp_dict = {}
+        full_terms_dict = {}
 
-        for w in words:
-            if len(w) >= 2:
-                val = tmp_dict.get(w, 0)
-                tmp_dict[w] = val + 1
+        words = np.array([word for word in jieba.cut(comments_str)]).astype(np.str)
+        unique, count = np.unique(words, return_counts=True)
 
-        for key in tmp_dict:
-            full_terms_dict.add(key, tmp_dict[key])
-
+        for i in range(len(unique)):
+            if len(unique[i]) >= 2:
+                full_terms_dict[unique[i]] = count[i]
+        
         return full_terms_dict
 
     def make_image(self, filename, text):
         wc = WordCloud(width=1920, height=1080, font_path=self.FONT_PATH, background_color="black", max_words=500)
         wc.generate_from_frequencies(text)
         wc.to_file(filename)
-
 
 
 if __name__ == "__main__":
