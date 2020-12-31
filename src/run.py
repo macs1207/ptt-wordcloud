@@ -1,4 +1,3 @@
-from enum import unique
 from PttWebCrawler.crawler import *
 from wordcloud import WordCloud
 import numpy as np
